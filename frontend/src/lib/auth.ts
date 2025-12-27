@@ -50,20 +50,6 @@ export async function signIn(credentials: UserCredentials): Promise<AuthResponse
   }
 }
 
-// Sign in with social providers (Google, GitHub)
-export async function signInWithSocial(provider: 'google' | 'github'): Promise<void> {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider,
-    options: {
-      redirectTo: `${window.location.origin}/dashboard`
-    }
-  })
-
-  if (error) {
-    throw new Error(error.message)
-  }
-}
-
 // Sign out
 export async function signOut(): Promise<void> {
   const { error } = await supabase.auth.signOut()

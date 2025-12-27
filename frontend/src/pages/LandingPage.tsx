@@ -5,7 +5,7 @@ import { Rocket } from "lucide-react";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-900 p-4 text-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 p-4 text-center">
       <header className="mb-12">
         <h1 className="text-6xl md:text-7xl font-heading font-bold text-white mb-6 animate-fade-in">
           Hustlr CRM
