@@ -92,6 +92,14 @@ export async function createProject(project: Omit<Project, "id">): Promise<Proje
   }
 
   const { supabase } = await import('./supabase');
+
+  // Get current user
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
+  // Ensure user exists in public.users table
+  await supabase.from('users').upsert({ id: user.id, email: user.email }).select();
+
   const { data, error } = await supabase
     .from('projects')
     .insert({
@@ -99,7 +107,8 @@ export async function createProject(project: Omit<Project, "id">): Promise<Proje
       description: project.description,
       status: project.status,
       due_date: project.dueDate,
-      client_id: project.client_id
+      client_id: project.client_id,
+      user_id: user.id
     })
     .select(`
       id,
@@ -200,6 +209,14 @@ export async function createClient(client: Omit<Client, "id">): Promise<Client> 
   }
 
   const { supabase } = await import('./supabase');
+
+  // Get current user
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
+  // Ensure user exists in public.users table
+  await supabase.from('users').upsert({ id: user.id, email: user.email }).select();
+
   const { data, error } = await supabase
     .from('clients')
     .insert({
@@ -208,7 +225,8 @@ export async function createClient(client: Omit<Client, "id">): Promise<Client> 
       email: client.email,
       linkedin: client.linkedin,
       twitter: client.twitter,
-      is_ghosted: client.isGhostedInitial
+      is_ghosted: client.isGhostedInitial,
+      user_id: user.id
     })
     .select()
     .single();
@@ -275,6 +293,14 @@ export async function createInvoice(invoice: Omit<Invoice, "id">): Promise<Invoi
   }
 
   const { supabase } = await import('./supabase');
+
+  // Get current user to check auth state
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
+  // Ensure user exists in public.users table
+  await supabase.from('users').upsert({ id: user.id, email: user.email }).select();
+
   const { data, error } = await supabase
     .from('invoices')
     .insert({
