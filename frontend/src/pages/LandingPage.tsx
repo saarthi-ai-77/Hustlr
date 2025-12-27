@@ -5,7 +5,7 @@ import { Rocket } from "lucide-react";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-millennial-pink to-cyber-teal p-4 text-center">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-600 to-indigo-900 p-4 text-center">
       <header className="mb-12">
         <h1 className="text-6xl md:text-7xl font-heading font-bold text-white mb-6 animate-fade-in">
           Hustlr CRM
@@ -14,8 +14,8 @@ const LandingPage = () => {
           Stop juggling, start hustling. The CRM that gets your grind.
         </p>
         <Link to="/auth">
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             className="bg-white text-primary hover:bg-white/90 hover-scale text-lg px-8 py-6 animate-fade-in animation-delay-600"
           >
             <Rocket className="mr-2 h-5 w-5" />
@@ -30,7 +30,7 @@ const LandingPage = () => {
           { title: "Manage Clients", description: "Build relationships that last. Know your clients better." },
           { title: "Send Invoices", description: "Get paid faster. Professional invoices, simplified." },
         ].map((feature, index) => (
-          <div 
+          <div
             key={feature.title}
             className={`bg-white/10 p-6 rounded-lg shadow-xl backdrop-blur-md animate-fade-in animation-delay-${900 + index * 200}`}
           >
