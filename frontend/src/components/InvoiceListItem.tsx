@@ -3,6 +3,7 @@ import React from 'react';
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, MoreHorizontal } from 'lucide-react'; // FileText for invoice icon
+import { formatCurrency } from '@/lib/utils';
 
 interface InvoiceListItemProps {
   id: string;
@@ -40,7 +41,7 @@ const InvoiceListItem: React.FC<InvoiceListItemProps> = ({ id, clientName, amoun
         <div>
           <p className="font-semibold text-foreground">{clientName} - Invoice #{id.slice(-4)}</p>
           <p className={`text-sm ${styles.text}`}>
-            Due: {dueDate} - Amount: ${amount.toFixed(2)}
+            Due: {new Date(dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })} - {formatCurrency(amount)}
           </p>
         </div>
       </div>

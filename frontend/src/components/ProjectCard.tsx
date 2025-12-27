@@ -84,7 +84,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         {dueDate && (
           <div className="flex items-center text-xs text-muted-foreground">
             <Calendar className="h-3 w-3 mr-1" />
-            Due: {new Date(dueDate).toLocaleDateString()}
+            Due: {new Date(dueDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
           </div>
         )}
 

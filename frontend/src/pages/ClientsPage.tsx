@@ -48,7 +48,7 @@ const ClientForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <Input
           id="name"
           value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
         />
       </div>
@@ -57,7 +57,7 @@ const ClientForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <Input
           id="company"
           value={formData.company}
-          onChange={(e) => setFormData({...formData, company: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
         />
       </div>
       <div>
@@ -66,7 +66,7 @@ const ClientForm = ({ onSuccess }: { onSuccess: () => void }) => {
           id="email"
           type="email"
           value={formData.email}
-          onChange={(e) => setFormData({...formData, email: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           required
         />
       </div>
@@ -75,7 +75,7 @@ const ClientForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <Input
           id="linkedin"
           value={formData.linkedin}
-          onChange={(e) => setFormData({...formData, linkedin: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
         />
       </div>
       <div>
@@ -83,14 +83,14 @@ const ClientForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <Input
           id="twitter"
           value={formData.twitter}
-          onChange={(e) => setFormData({...formData, twitter: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, twitter: e.target.value })}
         />
       </div>
       <div className="flex items-center space-x-2">
         <Switch
           id="ghosted"
           checked={formData.isGhostedInitial}
-          onCheckedChange={(checked) => setFormData({...formData, isGhostedInitial: checked})}
+          onCheckedChange={(checked) => setFormData({ ...formData, isGhostedInitial: checked })}
         />
         <Label htmlFor="ghosted">Mark as ghosted</Label>
       </div>
@@ -172,15 +172,15 @@ const ClientsPage = () => {
         <>
           {(filteredClients.length === 0 && searchTerm) ? (
             <div className="bg-card p-6 rounded-lg shadow min-h-[400px] flex flex-col items-center justify-center">
-                <p className="text-4xl mb-4">🔍</p>
-                <p className="text-muted-foreground text-lg">No clients found matching "{searchTerm}"</p>
-                <p className="text-sm text-muted-foreground mt-1">Try a different search term</p>
+              <p className="text-4xl mb-4">🔍</p>
+              <p className="text-muted-foreground text-lg">No clients found matching "{searchTerm}"</p>
+              <p className="text-sm text-muted-foreground mt-1">Try a different search term</p>
             </div>
           ) : (filteredClients.length === 0) ? (
             <div className="bg-card p-6 rounded-lg shadow min-h-[400px] flex flex-col items-center justify-center">
-                <p className="text-4xl mb-4">🤷‍♀️</p>
-                <p className="text-muted-foreground text-lg">No clients yet? Time to network!</p>
-                <p className="text-sm text-muted-foreground mt-1">Client contact cards will appear here.</p>
+              <p className="text-4xl mb-4">🤷‍♀️</p>
+              <p className="text-muted-foreground text-lg">No clients yet? Time to network!</p>
+              <p className="text-sm text-muted-foreground mt-1">Client contact cards will appear here.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -194,6 +194,8 @@ const ClientsPage = () => {
                   linkedin={client.linkedin}
                   twitter={client.twitter}
                   isGhostedInitial={client.isGhostedInitial}
+                  internalNotes={client.internalNotes}
+                  lastContactedAt={client.lastContactedAt}
                   onUpdate={refetch}
                 />
               ))}

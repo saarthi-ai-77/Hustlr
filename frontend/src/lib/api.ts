@@ -136,6 +136,8 @@ export interface Client {
   linkedin?: string;
   twitter?: string;
   isGhostedInitial: boolean;
+  internalNotes?: string;
+  lastContactedAt?: string;
 }
 
 export async function getClients(): Promise<Client[]> {
@@ -160,8 +162,32 @@ export async function getClients(): Promise<Client[]> {
     email: client.email,
     linkedin: client.linkedin,
     twitter: client.twitter,
-    isGhostedInitial: client.is_ghosted
+    isGhostedInitial: client.is_ghosted,
+    internalNotes: client.internal_notes,
+    lastContactedAt: client.last_contacted_at
   })) || [];
+}
+
+export async function updateClient(id: string, updates: Partial<Client>): Promise<void> {
+  const { supabase } = await import('./supabase');
+
+  // Map camelCase to snake_case for Supabase
+  const supabaseUpdates: any = {};
+  if (updates.name !== undefined) supabaseUpdates.name = updates.name;
+  if (updates.company !== undefined) supabaseUpdates.company = updates.company;
+  if (updates.email !== undefined) supabaseUpdates.email = updates.email;
+  if (updates.linkedin !== undefined) supabaseUpdates.linkedin = updates.linkedin;
+  if (updates.twitter !== undefined) supabaseUpdates.twitter = updates.twitter;
+  if (updates.isGhostedInitial !== undefined) supabaseUpdates.is_ghosted = updates.isGhostedInitial;
+  if (updates.internalNotes !== undefined) supabaseUpdates.internal_notes = updates.internalNotes;
+  if (updates.lastContactedAt !== undefined) supabaseUpdates.last_contacted_at = updates.lastContactedAt;
+
+  const { error } = await supabase
+    .from('clients')
+    .update(supabaseUpdates)
+    .eq('id', id);
+
+  if (error) throw error;
 }
 
 export async function createClient(client: Omit<Client, "id">): Promise<Client> {
@@ -196,7 +222,9 @@ export async function createClient(client: Omit<Client, "id">): Promise<Client> 
     email: data.email,
     linkedin: data.linkedin,
     twitter: data.twitter,
-    isGhostedInitial: data.is_ghosted
+    isGhostedInitial: data.is_ghosted,
+    internalNotes: data.internal_notes,
+    lastContactedAt: data.last_contacted_at
   };
 }
 

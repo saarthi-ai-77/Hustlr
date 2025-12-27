@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getInvoices, getClients, getProjects, createInvoice, Invoice as ApiInvoice } from "@/lib/api";
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
+import { formatCurrency } from '@/lib/utils';
 
 const InvoiceForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const [formData, setFormData] = useState({
@@ -63,7 +64,7 @@ const InvoiceForm = ({ onSuccess }: { onSuccess: () => void }) => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <Label>Client *</Label>
-        <Select value={formData.clientName} onValueChange={(value) => setFormData({...formData, clientName: value})}>
+        <Select value={formData.clientName} onValueChange={(value) => setFormData({ ...formData, clientName: value })}>
           <SelectTrigger>
             <SelectValue placeholder="Select a client" />
           </SelectTrigger>
@@ -85,7 +86,7 @@ const InvoiceForm = ({ onSuccess }: { onSuccess: () => void }) => {
           step="0.01"
           placeholder="0.00"
           value={formData.amount}
-          onChange={(e) => setFormData({...formData, amount: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
           required
         />
       </div>
@@ -103,7 +104,7 @@ const InvoiceForm = ({ onSuccess }: { onSuccess: () => void }) => {
             <Calendar
               mode="single"
               selected={formData.dueDate}
-              onSelect={(date) => setFormData({...formData, dueDate: date})}
+              onSelect={(date) => setFormData({ ...formData, dueDate: date })}
               initialFocus
             />
           </PopoverContent>
@@ -112,7 +113,7 @@ const InvoiceForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
       <div>
         <Label>Status</Label>
-        <Select value={formData.status} onValueChange={(value: any) => setFormData({...formData, status: value})}>
+        <Select value={formData.status} onValueChange={(value: any) => setFormData({ ...formData, status: value })}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -126,7 +127,7 @@ const InvoiceForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
       <div>
         <Label>Project (Optional)</Label>
-        <Select value={formData.project_id} onValueChange={(value) => setFormData({...formData, project_id: value})}>
+        <Select value={formData.project_id} onValueChange={(value) => setFormData({ ...formData, project_id: value })}>
           <SelectTrigger>
             <SelectValue placeholder="Select a project" />
           </SelectTrigger>
@@ -171,8 +172,8 @@ const InvoicesPage = () => {
     doc.setFontSize(12);
     doc.text(`Invoice #${invoice.id}`, 20, 50);
     doc.text(`Client: ${invoice.clientName}`, 20, 65);
-    doc.text(`Amount: $${invoice.amount.toFixed(2)}`, 20, 80);
-    doc.text(`Due Date: ${new Date(invoice.dueDate).toLocaleDateString()}`, 20, 95);
+    doc.text(`Amount: INR ${invoice.amount.toLocaleString('en-IN')}`, 20, 80);
+    doc.text(`Due Date: ${new Date(invoice.dueDate).toLocaleDateString('en-IN')}`, 20, 95);
     doc.text(`Status: ${invoice.status}`, 20, 110);
 
     doc.save(`invoice-${invoice.id}.pdf`);
@@ -234,9 +235,9 @@ const InvoicesPage = () => {
         <>
           {(invoices?.length || 0) === 0 ? (
             <div className="bg-card p-6 rounded-lg shadow min-h-[400px] flex flex-col items-center justify-center">
-                <p className="text-4xl mb-4">📄💨</p>
-                <p className="text-muted-foreground text-lg">No invoices yet!</p>
-                <p className="text-sm text-muted-foreground mt-1">Create your first invoice to get started.</p>
+              <p className="text-4xl mb-4">📄💨</p>
+              <p className="text-muted-foreground text-lg">No invoices yet!</p>
+              <p className="text-sm text-muted-foreground mt-1">Create your first invoice to get started.</p>
             </div>
           ) : (
             <div className="space-y-3">
