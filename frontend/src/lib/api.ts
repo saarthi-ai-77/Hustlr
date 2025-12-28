@@ -260,6 +260,7 @@ export interface Invoice {
   dueDate: string;
   status: "Paid" | "Pending" | "Overdue";
   project_id?: string;
+  projectTitle?: string;
 }
 
 export async function getInvoices(): Promise<Invoice[]> {
@@ -274,7 +275,7 @@ export async function getInvoices(): Promise<Invoice[]> {
   const { supabase } = await import('./supabase');
   const { data, error } = await supabase
     .from('invoices')
-    .select('*');
+    .select('*, projects(title)');
 
   if (error) throw error;
 
@@ -284,7 +285,8 @@ export async function getInvoices(): Promise<Invoice[]> {
     amount: invoice.amount,
     dueDate: invoice.due_date,
     status: invoice.status,
-    project_id: invoice.project_id
+    project_id: invoice.project_id,
+    projectTitle: (invoice.projects as any)?.title
   })) || [];
 }
 

@@ -15,6 +15,7 @@ import { getInvoices, getClients, getProjects, createInvoice, Invoice as ApiInvo
 import { toast } from 'sonner';
 import jsPDF from 'jspdf';
 import { formatCurrency } from '@/lib/utils';
+import { getCurrentUser } from '@/lib/auth';
 
 const InvoiceForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const [formData, setFormData] = useState({
@@ -163,21 +164,81 @@ const InvoicesPage = () => {
     return matchesSearch && matchesStatus;
   }) || [];
 
-  const generatePDF = (invoice: ApiInvoice) => {
+  const generatePDF = async (invoice: ApiInvoice) => {
+    const user = await getCurrentUser();
     const doc = new jsPDF();
 
-    doc.setFontSize(20);
-    doc.text('Hustlr CRM Invoice', 20, 30);
+    // Brand Header
+    doc.setFillColor(59, 130, 246); // Blue color from theme
+    doc.rect(0, 0, 210, 40, 'F');
 
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont('helvetica', 'bold');
+    doc.text('HUSTLR', 20, 25);
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text('PROFESSIONAL FREELANCE INVOICE', 20, 32);
+
+    doc.setFontSize(30);
+    doc.text('INVOICE', 140, 25);
+
+    // Reset Color
+    doc.setTextColor(0, 0, 0);
+
+    // User & Client Info
     doc.setFontSize(12);
-    doc.text(`Invoice #${invoice.id}`, 20, 50);
-    doc.text(`Client: ${invoice.clientName}`, 20, 65);
-    doc.text(`Amount: INR ${invoice.amount.toLocaleString('en-IN')}`, 20, 80);
-    doc.text(`Due Date: ${new Date(invoice.dueDate).toLocaleDateString('en-IN')}`, 20, 95);
-    doc.text(`Status: ${invoice.status}`, 20, 110);
+    doc.setFont('helvetica', 'bold');
+    doc.text('FROM:', 20, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.text(user?.email || 'Freelancer', 20, 67);
 
-    doc.save(`invoice-${invoice.id}.pdf`);
-    toast.success('PDF downloaded successfully!');
+    doc.setFont('helvetica', 'bold');
+    doc.text('TO:', 20, 85);
+    doc.setFont('helvetica', 'normal');
+    doc.text(invoice.clientName, 20, 92);
+
+    // Invoice Details
+    doc.setFont('helvetica', 'bold');
+    doc.text('INVOICE DETAILS', 140, 60);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`Invoice ID:  ${invoice.id.slice(0, 8).toUpperCase()}`, 140, 67);
+    doc.text(`Date:        ${new Date().toLocaleDateString('en-IN')}`, 140, 74);
+    doc.text(`Due Date:    ${new Date(invoice.dueDate).toLocaleDateString('en-IN')}`, 140, 81);
+    doc.text(`Status:      ${invoice.status.toUpperCase()}`, 140, 88);
+
+    // Table Header
+    doc.setFillColor(243, 244, 246);
+    doc.rect(20, 110, 170, 10, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.text('DESCRIPTION', 25, 116);
+    doc.text('AMOUNT', 160, 116);
+
+    // Table content
+    doc.setFont('helvetica', 'normal');
+    doc.text(invoice.projectTitle || 'Freelance Services', 25, 130);
+    doc.text(`INR ${invoice.amount.toLocaleString('en-IN')}`, 160, 130);
+
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 135, 190, 135);
+
+    // Totals
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('TOTAL', 130, 155);
+    doc.text(`INR ${invoice.amount.toLocaleString('en-IN')}`, 160, 155);
+
+    // Footer
+    doc.setFontSize(10);
+    doc.setTextColor(100, 100, 100);
+    doc.text('Notes:', 20, 180);
+    doc.text('Please make the payment by the due date mentioned above.', 20, 187);
+    doc.text('Thank you for your business!', 20, 200);
+
+    doc.save(`invoice-${invoice.id.slice(0, 8)}.pdf`);
+    toast.success('Professional PDF generated!');
   };
 
   return (
