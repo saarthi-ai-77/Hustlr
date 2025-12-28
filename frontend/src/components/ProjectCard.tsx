@@ -11,7 +11,7 @@ interface ProjectCardProps {
   id: string;
   title: string;
   description: string;
-  status: "Urgent AF" | "Chillin'" | "Blocked";
+  status: "To Do" | "In Progress" | "Completed";
   dueDate?: string;
   clientName?: string;
   onUpdate: () => void;
@@ -32,9 +32,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Urgent AF': return 'destructive';
-      case 'Chillin\'': return 'default';
-      case 'Blocked': return 'secondary';
+      case 'In Progress': return 'destructive';
+      case 'To Do': return 'default';
+      case 'Completed': return 'secondary';
       default: return 'default';
     }
   };

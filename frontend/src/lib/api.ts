@@ -47,10 +47,11 @@ export interface Project {
   id: string;
   title: string;
   description: string;
-  status: "Urgent AF" | "Chillin'" | "Blocked";
+  status: "To Do" | "In Progress" | "Completed";
   dueDate?: string;
   client_id?: string;
   clientName?: string;
+  budget?: number;
 }
 
 export async function getProjects(): Promise<Project[]> {
@@ -68,6 +69,7 @@ export async function getProjects(): Promise<Project[]> {
       status,
       due_date,
       client_id,
+      budget,
       clients (
         name
       )
@@ -82,6 +84,7 @@ export async function getProjects(): Promise<Project[]> {
     status: project.status,
     dueDate: project.due_date,
     client_id: project.client_id,
+    budget: project.budget,
     clientName: (project.clients as any)?.name
   })) || [];
 }
@@ -108,6 +111,7 @@ export async function createProject(project: Omit<Project, "id">): Promise<Proje
       status: project.status,
       due_date: project.dueDate,
       client_id: project.client_id,
+      budget: project.budget,
       user_id: user.id
     })
     .select(`
@@ -117,6 +121,7 @@ export async function createProject(project: Omit<Project, "id">): Promise<Proje
       status,
       due_date,
       client_id,
+      budget,
       clients (
         name
       )
@@ -132,6 +137,7 @@ export async function createProject(project: Omit<Project, "id">): Promise<Proje
     status: data.status,
     dueDate: data.due_date,
     client_id: data.client_id,
+    budget: data.budget,
     clientName: (data.clients as any)?.name
   };
 }

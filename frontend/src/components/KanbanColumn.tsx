@@ -9,7 +9,7 @@ interface Project {
   id: string;
   title: string;
   description: string;
-  status: "Urgent AF" | "Chillin'" | "Blocked";
+  status: "To Do" | "In Progress" | "Completed";
   dueDate?: string;
   clientName?: string;
 }
@@ -21,9 +21,9 @@ interface KanbanColumnProps {
 }
 
 const statusMap = {
-  'To Do': 'Chillin\'',
-  'In Progress': 'Urgent AF',
-  'Done': 'Blocked'
+  'To Do': 'To Do',
+  'In Progress': 'In Progress',
+  'Done': 'Completed'
 };
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, projects, onUpdate }) => {

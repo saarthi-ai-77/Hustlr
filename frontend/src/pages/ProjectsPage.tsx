@@ -20,7 +20,8 @@ const ProjectForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    status: 'Chillin\'' as const,
+    status: 'To Do' as const,
+    budget: 0,
     dueDate: undefined as Date | undefined,
     client_id: undefined as string | undefined
   });
@@ -43,7 +44,7 @@ const ProjectForm = ({ onSuccess }: { onSuccess: () => void }) => {
       toast.success('Project created successfully!');
       onSuccess();
       setFormData({
-        title: '', description: '', status: 'Chillin\'', dueDate: undefined, client_id: undefined
+        title: '', description: '', status: 'To Do', budget: 0, dueDate: undefined, client_id: undefined
       });
     } catch (error) {
       toast.error('Failed to create project');
@@ -59,7 +60,7 @@ const ProjectForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <Input
           id="title"
           value={formData.title}
-          onChange={(e) => setFormData({...formData, title: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           required
         />
       </div>
@@ -68,25 +69,36 @@ const ProjectForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <Textarea
           id="description"
           value={formData.description}
-          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
         />
       </div>
-      <div>
-        <Label>Status</Label>
-        <Select value={formData.status} onValueChange={(value: any) => setFormData({...formData, status: value})}>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Chillin'">Chillin'</SelectItem>
-            <SelectItem value="Urgent AF">Urgent AF</SelectItem>
-            <SelectItem value="Blocked">Blocked</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label>Status</Label>
+          <Select value={formData.status} onValueChange={(value: any) => setFormData({ ...formData, status: value })}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="To Do">To Do</SelectItem>
+              <SelectItem value="In Progress">In Progress</SelectItem>
+              <SelectItem value="Completed">Completed</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="budget">Budget (₹)</Label>
+          <Input
+            id="budget"
+            type="number"
+            value={formData.budget}
+            onChange={(e) => setFormData({ ...formData, budget: parseFloat(e.target.value) || 0 })}
+          />
+        </div>
       </div>
       <div>
         <Label>Client (Optional)</Label>
-        <Select value={formData.client_id} onValueChange={(value) => setFormData({...formData, client_id: value})}>
+        <Select value={formData.client_id} onValueChange={(value) => setFormData({ ...formData, client_id: value })}>
           <SelectTrigger>
             <SelectValue placeholder="Select a client" />
           </SelectTrigger>
@@ -112,13 +124,13 @@ const ProjectForm = ({ onSuccess }: { onSuccess: () => void }) => {
             <Calendar
               mode="single"
               selected={formData.dueDate}
-              onSelect={(date) => setFormData({...formData, dueDate: date})}
+              onSelect={(date) => setFormData({ ...formData, dueDate: date })}
               initialFocus
             />
           </PopoverContent>
         </Popover>
       </div>
-      <Button type="submit" disabled={isLoading}>
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? 'Creating...' : 'Create Project'}
       </Button>
     </form>
@@ -131,9 +143,9 @@ const ProjectsPage = () => {
     queryFn: getProjects,
   });
 
-  const todoProjects = projects?.filter(p => p.status === 'Chillin\'') || [];
-  const doingProjects = projects?.filter(p => p.status === 'Urgent AF') || [];
-  const doneProjects = projects?.filter(p => p.status === 'Blocked') || [];
+  const todoProjects = projects?.filter(p => p.status === 'To Do') || [];
+  const doingProjects = projects?.filter(p => p.status === 'In Progress') || [];
+  const doneProjects = projects?.filter(p => p.status === 'Completed') || [];
 
   // Real-time updates
   useEffect(() => {
