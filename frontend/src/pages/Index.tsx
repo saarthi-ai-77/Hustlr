@@ -62,6 +62,7 @@ const IndexPage = () => {
         .select('id, title, description, due_date, status, budget')
         .not('due_date', 'is', null)
         .gte('due_date', new Date().toISOString())
+        .neq('status', 'Completed')
         .order('due_date', { ascending: true });
       if (error) throw error;
 
@@ -240,7 +241,7 @@ const IndexPage = () => {
           </h2>
           <div className="bg-card rounded-lg shadow border border-border overflow-hidden">
             {upcomingProjects && upcomingProjects.length > 0 ? (
-              <div className="divide-y divide-border">
+              <div className="divide-y divide-border max-h-[400px] overflow-y-auto">
                 {upcomingProjects.map((project, idx) => (
                   <div key={idx} className="p-4 flex items-center justify-between hover:bg-muted/50 transition-colors group">
                     <div>

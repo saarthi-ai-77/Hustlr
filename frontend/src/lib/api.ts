@@ -314,7 +314,8 @@ export async function createInvoice(invoice: Omit<Invoice, "id">): Promise<Invoi
       amount: invoice.amount,
       due_date: invoice.dueDate,
       status: invoice.status,
-      project_id: invoice.project_id
+      project_id: invoice.project_id,
+      user_id: user.id
     })
     .select()
     .single();
